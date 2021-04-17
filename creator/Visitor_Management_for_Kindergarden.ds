@@ -1,0 +1,925 @@
+/*
+ * Author       : kantillo0683
+ * Generated on : 08-Apr-2021 19:48:13
+ * Version      : 1.0
+ */
+ application "Visitor Management for Kindergarden"
+ {
+ 	date format = "yyyy/MM/dd"
+ 	time zone = "Asia/Tokyo"
+ 	time format = "24-hr"
+	section Families
+	{
+		icon = "users-2-wc"
+		form Families
+		{
+			success message = "Family Added Successfully"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Family_Number
+			(
+    			type = autonumber
+				displayname = "家族No"
+				start index = 1
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Last_Name
+			(
+    			type = text
+				displayname = "苗字"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			SubForm
+			(
+				type = grid
+				displayname = "サブフォーム"
+				values  = Person.ID
+    			bidirectional = Families
+	 			row = 2
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "users-2-wc"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "送信"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "リセット"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "更新"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "キャンセル"
+					)
+				}
+			}
+		}
+		default list All_Families
+		{
+			displayName = "All Families"
+			show all rows from Families    
+			(
+				Family_Number as "家族No"
+				Last_Name as "苗字"
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Family_Number as "家族No"
+							Last_Name as "苗字"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 2
+					datablock4
+					(
+			 			layout type = -2
+		     			title = "Title"
+						fields
+						(
+							Family_Number as "家族No"
+							Last_Name as "苗字"
+						)
+					)
+					datablock5
+					(
+			 			layout type = -1
+		     			title = "サブフォーム"
+		     			related field = SubForm
+						fields
+						(
+							Families
+							Name as "名前"
+							Class
+							Birthday
+							Age
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Persons
+	{
+		icon = "users-2-woman"
+		form Person
+		{
+			success message = "Person Added Successfully"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Families
+			(
+				type = picklist
+				values  = Families.ID
+    			bidirectional = SubForm
+    			displayformat = [Family_Number]
+				searchable = true
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Name
+			(
+    			type = name
+				displayname = "名前"
+     			prefix
+     			(
+	     			 type = prefix
+	     			 displayname ="Prefix"
+	     			 visibility = false
+	     			 value = {"Mr.","Mrs.","Ms."}
+     			) 
+     			first_name
+     			(
+	     			 type = first_name
+	     			 displayname ="First Name"
+     			) 
+     			last_name
+     			(
+	     			 type = last_name
+	     			 displayname ="Last Name"
+     			) 
+     			suffix
+     			(
+	     			 type = suffix
+	     			 displayname ="Suffix"
+	     			 visibility = false
+     			) 
+	 			row = 1
+	 			column = 1   
+				width = medium
+				personal data = true
+			)
+			Class
+			(
+				type = picklist
+				values = {"年少", "年中", "年長", "保護者"}
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Birthday
+			(
+    			type = date
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Age
+			(
+				type = number
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "users-2-woman"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "送信"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "リセット"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "更新"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "キャンセル"
+					)
+				}
+			}
+		}
+		default list All_Persons
+		{
+			displayName = "All Persons"
+			show all rows from Person    
+			(
+				Name  as "名前"
+	 			(
+	      			displayformat = [first_name+""+prefix+""+last_name+""+suffix]
+	 			)
+				Age
+				Birthday
+				Families
+				Class
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Name as "名前"
+							Age
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 2
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Name as "名前"
+							Age
+							Birthday
+							Families
+							Class
+						)
+					)
+					datablock2
+					(
+			 			layout type = -2
+		     			title = "Person"
+		     			related field = Families
+						fields
+						(
+							Family_Number as "家族No"
+							Last_Name as "苗字"
+						)
+					)
+					datablock3
+					(
+			 			layout type = -1
+		     			title = "訪問履歴 - VisitPerson"
+		     			related field = VisitPerson.Person
+						fields
+						(
+							In_Time as "入園日時"
+							Out_Time as "退園日時"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Visits
+	{
+		icon = "tech-desktop"
+		form Visits
+		{
+			displayname = "訪問"
+			success message = "データを追加しました！"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Date_field
+			(
+    			type = date
+				displayname = "日付"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Family_Number
+			(
+    			type = text
+				displayname = "家族No"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Person
+			(
+				type = list
+				values  = Person.ID
+    			displayformat = [" " + Name.last_name + " " + Name.first_name]
+				sortorder = ascending
+				height = 60px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			In_Time
+			(
+    			type = datetime
+				displayname = "入園日時"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Out_Time
+			(
+    			type = datetime
+				displayname = "退園日時"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "ui-1-bold-add"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "送信"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "リセット"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "更新"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "キャンセル"
+					)
+				}
+			}
+		}
+		default list VisitFamily_Report
+		{
+			displayName = "VisitFamily レポート"
+			show all rows from Visits    
+			(
+				Date_field as "日付"
+				Family_Number as "家族No"
+				Person
+				In_Time as "入園日時"
+				Out_Time as "退園日時"
+			)
+			options
+			(
+				icon = "design-bullet-list-67"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Date_field as "日付"
+							Family_Number as "家族No"
+							Person
+							In_Time as "入園日時"
+							Out_Time as "退園日時"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Date_field as "日付"
+							Family_Number as "家族No"
+							Person
+							In_Time as "入園日時"
+							Out_Time as "退園日時"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section VisitPerson
+	{
+		icon = "tech-desktop"
+		form VisitPerson
+		{
+			success message = "データを追加しました！"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			VisitID
+			(
+				type = picklist
+				values  = Visits.ID
+    			displayformat = [ID]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Person
+			(
+				type = picklist
+				values  = Person.ID
+    			displayformat = [" " + Name.prefix + " " + Name.first_name + " " + Name.last_name + " " + Name.suffix]
+				searchable = true
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			In_Time
+			(
+    			type = datetime
+				displayname = "入園日時"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Out_Time
+			(
+    			type = datetime
+				displayname = "退園日時"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "ui-1-bold-add"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "送信"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "リセット"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "更新"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "キャンセル"
+					)
+				}
+			}
+		}
+		default list VisitPerson_Report
+		{
+			displayName = "VisitPerson レポート"
+			show all rows from VisitPerson    
+			(
+				Person
+				In_Time as "入園日時"
+				Out_Time as "退園日時"
+				VisitID
+			)
+			options
+			(
+				icon = "design-bullet-list-67"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Person
+							In_Time as "入園日時"
+							Out_Time as "退園日時"
+							VisitID
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Person
+							In_Time as "入園日時"
+							Out_Time as "退園日時"
+							VisitID
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Person_Detail
+	{
+		displayname= "Person Detail"
+		icon = "users-2-woman"
+				 page Dashboard 
+	 	 { 
+ 	 	 displayname = "Dashboard" 
+
+ 	 	 icon = "ui-1-dashboard-half" 
+	 	 Content="<zml \n\t\t\tisPdfEnabled='false'\n\t\t\n\t\t\tisPrintEnabled='false'\n\t\t\n\t\t\n\t\t\n\t\t\n\t\t>\n\t<layout>\n\t<row>\n\t<column\n   \t\t width=\"24%\"\n   \t>\n\t<panel \n>\n\t<pr    \t\t height = 'fill'\n   \t\t width = 'fill'\n\n>\n\t<pc    \t\t width = '100%'\n   \t\t bgColor = '#FFFFFF'\n   \t\t padding = '20px'\n   \t\t hAlign = 'center'\n   \t\t vAlign = 'middle'\n\n>\n\t<pr    \t\t height = 'auto'\n   \t\t width = 'auto'\n\n>\n\t<pc    \t\t padding = '5px'\n\n>\n\t<pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Text'\n   \t\t value = '\u5E74\u5C11'\n   \t\t size = '15px'\n   \t\t color = '#333333'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr><pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Form Data'\n   \t\t value = 'thisapp.VisitPerson.ID.count'\n   \t\t criteria = '((((In_Time is today)&amp;&amp;(Person.Class == &quot;\u5E74\u5C11&quot;))))'\n   \t\t size = '35px'\n   \t\t color = '#FF4C2F'\n   \t\t bold = 'true'\n   \t\t marginTop = '2px'\n   \t\t displayType = 'actual'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/panel>\n<\/column><column\n   \t\t width=\"27%\"\n   \t>\n\t<panel \n>\n\t<pr    \t\t height = 'fill'\n   \t\t width = 'fill'\n\n>\n\t<pc    \t\t width = '100%'\n   \t\t bgColor = '#FFFFFF'\n   \t\t padding = '20px'\n   \t\t hAlign = 'center'\n   \t\t vAlign = 'middle'\n\n>\n\t<pr    \t\t height = 'auto'\n   \t\t width = 'auto'\n\n>\n\t<pc    \t\t padding = '5px'\n\n>\n\t<pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Text'\n   \t\t value = '\u5E74\u4E2D'\n   \t\t size = '15px'\n   \t\t color = '#333333'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr><pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Form Data'\n   \t\t value = 'thisapp.VisitPerson.ID.count'\n   \t\t criteria = '((((In_Time is today)&amp;&amp;(Person.Class == &quot;\u5E74\u4E2D&quot;))))'\n   \t\t size = '35px'\n   \t\t color = '#FF4C2F'\n   \t\t bold = 'true'\n   \t\t marginTop = '2px'\n   \t\t displayType = 'actual'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/panel>\n<\/column><column\n   \t\t width=\"25%\"\n   \t>\n\t<panel \n>\n\t<pr    \t\t height = 'fill'\n   \t\t width = 'fill'\n\n>\n\t<pc    \t\t width = '100%'\n   \t\t bgColor = '#FFFFFF'\n   \t\t padding = '20px'\n   \t\t hAlign = 'center'\n   \t\t vAlign = 'middle'\n\n>\n\t<pr    \t\t height = 'auto'\n   \t\t width = 'auto'\n\n>\n\t<pc    \t\t padding = '5px'\n\n>\n\t<pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Text'\n   \t\t value = '\u5E74\u9577'\n   \t\t size = '15px'\n   \t\t color = '#333333'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr><pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Form Data'\n   \t\t value = 'thisapp.VisitPerson.ID.count'\n   \t\t criteria = '((((In_Time is today)&amp;&amp;(Person.Class == &quot;\u5E74\u9577&quot;))))'\n   \t\t size = '35px'\n   \t\t color = '#FF4C2F'\n   \t\t bold = 'true'\n   \t\t marginTop = '2px'\n   \t\t displayType = 'actual'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/panel>\n<\/column><column\n   \t\t width=\"24%\"\n   \t>\n\t<panel \n>\n\t<pr    \t\t height = 'fill'\n   \t\t width = 'fill'\n\n>\n\t<pc    \t\t width = '100%'\n   \t\t bgColor = '#FFFFFF'\n   \t\t padding = '20px'\n   \t\t hAlign = 'center'\n   \t\t vAlign = 'middle'\n\n>\n\t<pr    \t\t height = 'auto'\n   \t\t width = 'auto'\n\n>\n\t<pc    \t\t padding = '5px'\n\n>\n\t<pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Text'\n   \t\t value = '\u4FDD\u8B77\u8005'\n   \t\t size = '15px'\n   \t\t color = '#333333'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr><pr \n>\n\t<pc \n>\n\t<text    \t\t type = 'Form Data'\n   \t\t value = 'thisapp.VisitPerson.ID.count'\n   \t\t criteria = '((((In_Time is today)&amp;&amp;(Person.Class == &quot;\u4FDD\u8B77\u8005&quot;))))'\n   \t\t size = '35px'\n   \t\t color = '#FF4C2F'\n   \t\t bold = 'true'\n   \t\t marginTop = '2px'\n   \t\t displayType = 'actual'\n\n>\n<\/text>\n\n\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/panel>\n<\/column>\n<\/row>\n<\/layout>\n<\/zml>" 
+ 	 	}
+	}
+
+
+
+		workflow
+		{
+		form
+		{
+			Fetch_Person_By_Family_Nu as "Fetch Person By Family Number"
+			{
+				type =  form
+				form = Visits
+				record event = on add or edit
+
+				on user input of Family_Number
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											person = Person[Families.Family_Number == input.Family_Number.toLong()];
+										info person;
+										for each  p in person
+										{
+											input.Person:ui.add(p.ID);
+											// 	Visits.Person:ui.add(p.ID);
+										}
+						)
+					}
+				}
+
+			}
+			upsert_visitperson as "upsert_visitperson"
+			{
+				type =  form
+				form = Visits
+				record event = on add or edit
+
+				on success
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											visitors = input.Person;
+										delete from VisitPerson[VisitID == input.ID];
+										for each  visitor in visitors
+										{
+											visitPerson = insert into VisitPerson
+										[
+											Added_User=zoho.loginuser
+											VisitID=input.ID
+											Person=visitor
+											In_Time=input.In_Time
+											Out_Time=input.Out_Time
+										];
+										}
+						)
+					}
+				}
+
+			}
+		}
+
+
+	}
+	share_settings
+	{
+			"Read"
+			{
+				name = "Read"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have read permission for all components\n"
+			}
+			"Write"
+			{
+				name = "Write"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have write permission for all components\n"
+			}
+			"Administrator"
+			{
+				name = "Administrator"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have all the permissions.\n"
+			}
+			roles
+			{
+				"CEO"
+				{
+					description = "User belonging to this role can access data of all other users."
+				}
+			}
+	}
+
+	customize
+	{
+		
+		layout = "tab"
+		color = "black"
+		base theme = "professional"
+		new theme = 1
+		new theme color = 6
+		icons = true
+		icons style = outline
+	}
+
+	
+}
